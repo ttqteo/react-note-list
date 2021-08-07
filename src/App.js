@@ -33,7 +33,7 @@ function App() {
   const onClickAddBtn = useCallback(
     (e) => {
       setNoteList([
-        { id: v4(), name: textInput, isCompleted: false },
+        { id: v4(), name: textInput, isCompleted: false, isDelete: false },
         ...noteList,
       ]);
       setTextInput("");
@@ -45,6 +45,14 @@ function App() {
     setNoteList((prevState) =>
       prevState.map((note) =>
         note.id === id ? { ...note, isCompleted: true } : note
+      )
+    );
+  }, []);
+
+  const onClickTrashBtn = useCallback((id) => {
+    setNoteList((prevState) =>
+      prevState.map((note) =>
+        note.id === id ? { ...note, isDelete: true } : note
       )
     );
   }, []);
@@ -69,7 +77,11 @@ function App() {
           </Button>
         </InputGroup.Append>
       </InputGroup>
-      <NoteList noteList={noteList} onClickCheckBtn={onClickCheckBtn} />
+      <NoteList
+        noteList={noteList}
+        onClickCheckBtn={onClickCheckBtn}
+        onClickTrashBtn={onClickTrashBtn}
+      />
     </div>
   );
 }
