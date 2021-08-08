@@ -17,21 +17,26 @@ const ButtonStyled = styled(Button)`
       `}
   }
 
-  &:hover .btn-icon-wrapper {
-    display: flex;
-  }
-  &:hover .btn-icon-wrapper .btn-icon {
+  ${(props) =>
+    props.isdeleted &&
+    css`
+      display: none;
+    `}
+
+  &:hover .btn-icon-wrapper .btn-icon,
+  &.active .btn-icon {
     color: #eee;
   }
 
+  &:hover .btn-icon-wrapper,
   .btn-icon-wrapper {
-    display: none;
+    display: flex;
   }
 
   .btn-icon {
     display: block;
     width: 25px;
-    color: #333;
+    color: #666;
     margin-left: 4px;
   }
   .btn-icon:hover {
@@ -44,25 +49,22 @@ export default function NoteItem({ note, onClickCheckBtn, onClickTrashBtn }) {
   return (
     <>
       <ButtonStyled
-        iscompleted={note.isCompleted}
+        iscompleted={note.isCompleted ? "true" : undefined}
+        isdeleted={note.isDeleted ? "true" : undefined}
         variant="outline-secondary"
         block
+        active={note.isCompleted}
+        onClick={(e) => {
+          if (!e.target.closest(".btn-icon")) onClickCheckBtn(note.id);
+        }}
       >
         {note.name}
         <div className="btn-icon-wrapper">
-          <span className="btn-icon" onClick={() => onClickCheckBtn(note.id)}>
-            <FontAwesomeIcon icon={faCheck} />
-          </span>
           <span className="btn-icon">
-            <FontAwesomeIcon icon={faEdit} />
-          </span>
-          <span
-            className="btn-icon"
-            onClick={() => {
-              onClickTrashBtn(note.id);
-            }}
-          >
-            <FontAwesomeIcon icon={faTrash} />
+            <FontAwesomeIcon
+              icon={faTrash}
+              onClick={() => onClickTrashBtn(note.id)}
+            />
           </span>
         </div>
       </ButtonStyled>

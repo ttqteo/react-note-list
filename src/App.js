@@ -11,6 +11,7 @@ const NOTE_APP_STORAGE_KEY = "NOTE_APP";
 
 function App() {
   const [noteList, setNoteList] = useState([]);
+  const [noteListArchive, setNoteListArchive] = useState([]);
   const [textInput, setTextInput] = useState("");
 
   //Storage Local
@@ -30,16 +31,13 @@ function App() {
     setTextInput(e.target.value);
   }, []);
 
-  const onClickAddBtn = useCallback(
-    (e) => {
-      setNoteList([
-        { id: v4(), name: textInput, isCompleted: false, isDelete: false },
-        ...noteList,
-      ]);
-      setTextInput("");
-    },
-    [textInput, noteList]
-  );
+  const onClickAddBtn = useCallback(() => {
+    setNoteList([
+      { id: v4(), name: textInput, isCompleted: false, isDeleted: false },
+      ...noteList,
+    ]);
+    setTextInput("");
+  }, [textInput, noteList]);
 
   const onClickCheckBtn = useCallback((id) => {
     setNoteList((prevState) =>
@@ -52,14 +50,16 @@ function App() {
   const onClickTrashBtn = useCallback((id) => {
     setNoteList((prevState) =>
       prevState.map((note) =>
-        note.id === id ? { ...note, isDelete: true } : note
+        note.id === id ? { ...note, isDeleted: true } : note
       )
     );
   }, []);
 
   return (
     <div className="App">
-      <h5 className="App-title">Danh sách việc cần làm</h5>
+      <div className="App-title">
+        <h5>Danh sách việc cần làm</h5>
+      </div>
       <InputGroup className="mb-3">
         <FormControl
           value={textInput}
